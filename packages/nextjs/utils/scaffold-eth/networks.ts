@@ -1,5 +1,39 @@
-import * as chains from "wagmi/chains";
+import * as defaultChains from "wagmi/chains";
 import scaffoldConfig from "~~/scaffold.config";
+
+const galadrielDevnet: defaultChains.Chain = {
+  id: 696969,
+  name: "Galadriel Devnet",
+  network: "galadrielDevnet",
+  nativeCurrency: {
+    name: "Galadriel Devnet GAL",
+    symbol: "GAL",
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://devnet.galadriel.com"],
+    },
+    public: {
+      http: ["https://devnet.galadriel.com"],
+    }
+  },
+  blockExplorers: {
+    galadrielExplorer: {
+      name: "Galadrielexplorer",
+      url: "https://explorer.galadriel.com",
+    },
+    default: {
+      name: "Galadrielexplorer",
+      url: "https://explorer.galadriel.com",
+    }
+  },
+};
+
+const chains = {
+  ...defaultChains,
+  galadrielDevnet,
+};
 
 export type TChainAttributes = {
   // color | [lightThemeColor, darkThemeColor]
@@ -51,6 +85,9 @@ export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
   [chains.fantomTestnet.id]: {
     color: "#1969ff",
   },
+  [chains.galadrielDevnet.id]: {
+    color: "#1969ff",
+  },
 };
 
 /**
@@ -88,7 +125,7 @@ export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
  * @param address
  * @returns block explorer address URL and etherscan URL if block explorer URL is not present for wagmi network
  */
-export function getBlockExplorerAddressLink(network: chains.Chain, address: string) {
+export function getBlockExplorerAddressLink(network: defaultChains.Chain, address: string) {
   const blockExplorerBaseURL = network.blockExplorers?.default?.url;
   if (network.id === chains.hardhat.id) {
     return `/blockexplorer/address/${address}`;
@@ -105,7 +142,7 @@ export function getBlockExplorerAddressLink(network: chains.Chain, address: stri
  * @returns targetNetwork object consisting targetNetwork from scaffold.config and extra network metadata
  */
 
-export function getTargetNetwork(): chains.Chain & Partial<TChainAttributes> {
+export function getTargetNetwork(): defaultChains.Chain & Partial<TChainAttributes> {
   const configuredNetwork = scaffoldConfig.targetNetwork;
 
   return {

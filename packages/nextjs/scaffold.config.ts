@@ -1,7 +1,7 @@
-import * as chains from "wagmi/chains";
+import * as defaultChains from "wagmi/chains";
 
 export type ScaffoldConfig = {
-  targetNetwork: chains.Chain;
+  targetNetwork: defaultChains.Chain;
   pollingInterval: number;
   alchemyApiKey: string;
   walletConnectProjectId: string;
@@ -9,9 +9,43 @@ export type ScaffoldConfig = {
   walletAutoConnect: boolean;
 };
 
+const galadrielDevnet: defaultChains.Chain = {
+  id: 696969,
+  name: "Galadriel Devnet",
+  network: "galadrielDevnet",
+  nativeCurrency: {
+    name: "Galadriel Devnet GAL",
+    symbol: "GAL",
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://devnet.galadriel.com"],
+    },
+    public: {
+      http: ["https://devnet.galadriel.com"],
+    }
+  },
+  blockExplorers: {
+    galadrielExplorer: {
+      name: "Galadrielexplorer",
+      url: "https://explorer.galadriel.com",
+    },
+    default: {
+      name: "Galadrielexplorer",
+      url: "https://explorer.galadriel.com",
+    }
+  },
+};
+
+const chains = {
+  ...defaultChains,
+  galadrielDevnet,
+};
+
 const scaffoldConfig = {
   // The network where your DApp lives in
-  targetNetwork: chains.foundry,
+  targetNetwork: chains.galadrielDevnet,
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect on the local network
