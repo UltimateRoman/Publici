@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import "../contracts/Agent.sol";
 import "../contracts/Manager.sol";
 import "../contracts/PubliciNFT.sol";
+import "../contracts/mocks/USDT.sol";
 import "./DeployHelpers.s.sol";
 
 contract DeployScript is ScaffoldETHDeploy {
@@ -17,6 +18,13 @@ contract DeployScript is ScaffoldETHDeploy {
             );
         }
         vm.startBroadcast(deployerPrivateKey);
+        USDT usdt = new USDT(vm.addr(deployerPrivateKey));
+        console.logString(
+            string.concat(
+                "USDT deployed at: ",
+                vm.toString(address(usdt))
+            )
+        );
         Agent agent = new Agent(
             0x4168668812C94a3167FCd41D12014c5498D74d7e,
             "You are a helpful assistant"
@@ -27,6 +35,29 @@ contract DeployScript is ScaffoldETHDeploy {
                 vm.toString(address(agent))
             )
         );
+        PubliciNFT nft = new PubliciNFT(
+            vm.addr(deployerPrivateKey),
+            vm.addr(deployerPrivateKey)
+        );
+        console.logString(
+            string.concat(
+                "PubliciNFT deployed at: ",
+                vm.toString(address(nft))
+            )
+        );
+        Manager manager = new Manager(
+            INFT(address(nft)),
+            IAgent(address(agent)),
+            IERC20(address(usdt))
+        );
+        console.logString(
+            string.concat(
+                "Manager deployed at: ",
+                vm.toString(address(manager))
+            )
+        );
+        bytes32 MINTER_ROLE = keccak256("MINTER_ROLE");
+        nft.grantRole(MINTER_ROLE, address(manager));
         vm.stopBroadcast();
 
         /**
