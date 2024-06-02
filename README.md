@@ -1,6 +1,8 @@
 # Publici
 On-chain AI agent that generates portfolio snapshot NFT's
 
+Publici is essentially an on-chain AI-based portfolio report generator. It makes use of an AI agent on Galadriel to generate images that represents a user's crypto portfolio at a particular point of time. The user can choose to mint the generated image as an NFT, which thereby acts as a portfolio snapshot of the user. The AI agent is composed of an LLM and additional tools for web search and image generation. The token balance data is input to the AI agent, which uses web search to identify token value (in USD) and subsequently generate the image. The image can then be minted on-chain as an NFT. Using Galadriel, the entire process takes place on-chain, including AI inference.
+
 <br/>
 
 ### Contract deployments
