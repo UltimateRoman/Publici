@@ -11,6 +11,12 @@ Publici is essentially an on-chain AI-based portfolio report generator. It makes
 
 <br/>
 
+<p align="center">
+ <img src="diagram.png" />
+</p>
+
+<br/> 
+
 ### Contract deployments
 
 **Galadriel Devnet**
