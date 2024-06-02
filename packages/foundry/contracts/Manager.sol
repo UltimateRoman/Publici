@@ -11,10 +11,9 @@ interface INFT {
 }
 
 interface IAgent {
-    function prompt() external view returns (string memory);
-    function agentRuns(uint) external view returns (AgentRun memory);
-    function agentRunCount() external view returns (uint);
     function runAgent(string memory query, uint8 max_iterations) external returns (uint i);
+    function getMessageHistoryContents(uint agentId) external view returns (string[] memory);
+    function getMessageHistoryRoles(uint agentId) external view returns (string[] memory);
 }
 
 contract Manager {
@@ -22,7 +21,11 @@ contract Manager {
     IAgent public agent;
     IERC20 public token;
 
-    uint256 public agentRunCount;
+    uint8 public maxIterations = 5;
+    uint256 public agentRunId;
+
+    event AgentRunCreated(address indexed owner, uint indexed runId);
+    event MintedNFT(address indexed owner);
 
     constructor(INFT _nft, IAgent _agent, IERC20 _token) {
         nft = _nft;
@@ -30,10 +33,21 @@ contract Manager {
         token = _token;
     }
 
-    function portfolioMint(string memory uri) external {
-        uint256 ethBalance = msg.sender.balance;
-        uint256 usdtBalance = token.balanceOf(msg.sender);
+    function queryAgent(string memory query) external {
+        agentRunId = agent.runAgent(query, maxIterations);
+        emit AgentRunCreated(msg.sender, agentRunId);
+    }
 
-        
+    function mintNFT(string memory uri) external {
+        nft.safeMint(msg.sender, uri);
+        emit MintedNFT(msg.sender);
+    }
+
+    function setMaxIterations(uint8 _maxIterations) external {
+        maxIterations = _maxIterations;
+    }
+
+    function getLastMessageHistory() public view returns (string[] memory) {
+        return agent.getMessageHistoryContents(agentRunId);
     }
 }

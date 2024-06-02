@@ -2,6 +2,8 @@
 pragma solidity ^0.8.19;
 
 import "../contracts/Agent.sol";
+import "../contracts/Manager.sol";
+import "../contracts/PubliciNFT.sol";
 import "./DeployHelpers.s.sol";
 
 contract DeployScript is ScaffoldETHDeploy {
